@@ -52,6 +52,8 @@
             | Admin Tools
             b.caret
           ul.dropdown-menu
+            li(class=(title == 'Admin Page') ? 'active' : undefined)
+              a(href='/admin/users') Admin Page
             li(class=(title == 'Assessment Scores') ? 'active' : undefined)
               a(href='/applicant/scores')
                 span.fa.fa-caret-right(aria-hidden='true')
