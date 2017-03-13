@@ -21,11 +21,12 @@ var mywindow = $(window);
 var mypos = mywindow.scrollTop();
 var up = false;
 var newscroll;
+var navbarColor = "0, 42, 67";
+var navOpacity = 0;
+var navBackColor;
 mywindow.scroll(function() {
   newscroll = mywindow.scrollTop();
-  var navbarColor = "0, 42, 67";
-  var navOpacity = 0;
-  var navBackColor;
+
   if (newscroll > 0 && !up) {
     navOpacity = 1;
     navBackColor = 'rgba(' + navbarColor + ',' + navOpacity + ')';
