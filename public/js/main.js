@@ -57,7 +57,6 @@ mywindow.scroll(function() {
   }
 
   mypos = newscroll;
-  console.log(mypos);
 });
 
 

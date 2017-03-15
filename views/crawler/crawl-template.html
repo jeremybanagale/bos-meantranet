@@ -6,9 +6,11 @@
             <th>Phone</th>
             <th>Street</th>
             <th>City</th>
+            <th>Region</th>
             <th>Postal</th>
             <th>Category</th>
             <th>Website</th>
+            <th>Scraper</th>
         </thead>
         <tbody>
               {{#each business}}
@@ -17,9 +19,11 @@
                 <td>{{phone}}</td>
                 <td>{{street_address}}</td>
                 <td>{{address_locality}}</td>
+                <td>{{address_region}}</td>
                 <td>{{postal_code}}</td>
                 <td>{{category}}</td>
                 <td>{{website}}</td>
+                <td>{{scraper}}</td>
               {{/each}}
         </tbody>
     </table>

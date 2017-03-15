@@ -23,16 +23,36 @@ $(document).ready(function() {
 
         loadCrawlers();
     });
-    $('#state').bind('select', loadUsCities());
+
+    $('#state').change(loadUsCities);
     $('#scrape').click(scrapeThis);
     $('#download').click(downloadCSV);
-    // $('#reset').click(function(){
-    //
+    // $('#crawlmode').change(function() {
+    //     if ($('input[type=checkbox]:checked').length > 0) {
+    //         crawlMode();
+    //     }
     // });
 
+    //TODO test
+    function crawlMode() {
+      do {
+        $('#city').val(getRandomItem($('#json-cities > option')));
+        scrapeThis();
+      }
+      while (($('input[type=checkbox]:checked').length > 0));
+    }
     /**
-     * Functions:
+     * Get random item.
      */
+    function getRandomItem(options) {
+        var items = [];
+
+        options.each(function() {
+            items.push($(this).val());
+        });
+
+        return items[Math.floor(Math.random() * items.length)];
+    }
 
     /**
      * Loads list of available website crawlers.
@@ -42,14 +62,14 @@ $(document).ready(function() {
         var country = $('input[name=country]:checked').val();
         var crawlers = {
             uk: [
-                'Yell.com'
+                'Yell'
             ],
             us: [
-                'Citysearch.com',
-                'Yellowpages.com',
-                'Restaurant.com',
-                'Tripdavisor.com',
-                'Yelp.com'
+                'Citysearch',
+                'Yellowpages',
+                'Restaurantdotcom',
+                'Tripdavisor',
+                'Yelp'
             ]
         }
 
@@ -127,15 +147,16 @@ $(document).ready(function() {
         var state = $('#state').val();
 
         var req = new XMLHttpRequest();
-        var jsonUrl = 'http://gomashup.com/json.php?fds=geo/usa/zipcode/state/' + state;
+        // var jsonUrl = 'https://gist.github.com/Miserlou/c5cd8364bf9b2420bb29';
 
+        //TODO Change this to US Cities json
+        var jsonUrl = 'https://gist.githubusercontent.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_titlecase.json';
         var placeholder = "e.g. Austin";
 
         req.onreadystatechange = function(res) {
             if (req.readyState === 4) {
                 if (req.status === 200) {
                     var json = JSON.parse(req.responseText);
-                    var jsonOptions = json['result'];
 
                     if (datalist.hasChildNodes()) {
                         while (datalist.firstChild) {
@@ -143,10 +164,13 @@ $(document).ready(function() {
                         }
                     }
 
-                    jsonOptions.forEach(function(item) {
+                    json.forEach(function(item) {
                         var option = document.createElement('option');
 
-                        option.value = item['City'];
+                        // option.value = item['city'];
+                        //TODO CHange option value and text
+                        option.text = item['abbreviation'];
+                        option.value = item['name'];
                         datalist.appendChild(option);
                     });
 
@@ -205,10 +229,11 @@ $(document).ready(function() {
     /**
      * Start scraper function on button click.
      */
-    function scrapeThis(e) {
+    function scrapeThis() {
         var categories = $('#category').val().split('\n');
         var parameters = {
             country: $('input[name=country]:checked').val(),
+            website: $('#website').val(),
             location: $('#city').val(),
             category: ''
         };
@@ -217,13 +242,12 @@ $(document).ready(function() {
         var dataTemplate = Handlebars.compile(source);
         results = $('#results')
 
-        // newAlert("Please Wait!", "We're still scraping...");
+        newAlert("Please Wait!", "We're still scraping...");
 
         for (var i = 0; i < categories.length; i++) {
             parameters.category = categories[i];
 
             $.get('/searching', parameters, function(data) {
-
                 if (data instanceof Object) {
                     results.append(dataTemplate({
                         page: data
@@ -232,7 +256,7 @@ $(document).ready(function() {
                     results.append(data);
                 };
 
-                showModal(parameters, data.business.length);
+                // showModal(parameters, data.business.length);
                 data.business = filterArray(data.business, filterD121);
                 scrapedData.push(data);
             });

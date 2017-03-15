@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "cors": "^2.8.1",
     "eslint": "^3.9.1",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.1.0",
