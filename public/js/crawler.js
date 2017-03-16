@@ -57,44 +57,44 @@ $(document).ready(function() {
     /**
      * Loads list of available website crawlers.
      */
-    function loadCrawlers(e) {
-        var datalist = document.getElementById('website-crawlers');
-        var country = $('input[name=country]:checked').val();
-        var crawlers = {
-            uk: [
-                'Yell'
-            ],
-            us: [
-                'Citysearch',
-                'Yellowpages',
-                'Restaurantdotcom',
-                'Tripdavisor',
-                'Yelp'
-            ]
-        }
-
-        var crawler;
-
-        if (country == 'United States') {
-            crawler = crawlers['us'];
-
-        } else if (country == 'United Kingdom') {
-            crawler = crawlers['uk'];
-        }
-
-        if (datalist.hasChildNodes()) {
-            while (datalist.firstChild) {
-                datalist.removeChild(datalist.firstChild);
-            }
-        }
-
-        for (var i = 0; i < crawler.length; i++) {
-            var option = document.createElement('option');
-
-            option.value = crawler[i];
-            datalist.appendChild(option);
-        }
-    }
+    // function loadCrawlers(e) {
+    //     var datalist = document.getElementById('website-crawlers');
+    //     var country = $('input[name=country]:checked').val();
+    //     var crawlers = {
+    //         uk: [
+    //             'Yell'
+    //         ],
+    //         us: [
+    //             'Citysearch',
+    //             'Yellowpages',
+    //             'Restaurantdotcom',
+    //             'Tripdavisor',
+    //             'Yelp'
+    //         ]
+    //     }
+    //
+    //     var crawler;
+    //
+    //     if (country == 'United States') {
+    //         crawler = crawlers['us'];
+    //
+    //     } else if (country == 'United Kingdom') {
+    //         crawler = crawlers['uk'];
+    //     }
+    //
+    //     if (datalist.hasChildNodes()) {
+    //         while (datalist.firstChild) {
+    //             datalist.removeChild(datalist.firstChild);
+    //         }
+    //     }
+    //
+    //     for (var i = 0; i < crawler.length; i++) {
+    //         var option = document.createElement('option');
+    //
+    //         option.value = crawler[i];
+    //         datalist.appendChild(option);
+    //     }
+    // }
 
     /**
      * Loads list of states in the United States.
