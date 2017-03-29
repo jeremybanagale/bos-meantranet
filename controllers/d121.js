@@ -301,7 +301,7 @@ function scrapeYell(params, callback) {
         //     '165.234.102.177:8080',
         //     '97.77.104.22:80'
         // ])
-        .delay(1000)
+        .delay(3000)
         .follow('@href')
         .set({
             'name': 'h1.businessCapsule--title',
@@ -310,7 +310,7 @@ function scrapeYell(params, callback) {
             'address_locality': 'span[itemprop="addressLocality"]',
             'address_region': 'span[itemprop="addressRegion"]',
             'postal_code': 'span[itemprop="postalCode"]',
-            'category': 'span[itemprop="name"]',
+            'category': 'span[itemprop="name"]:nth-last-child(1)',
             'website': 'div.businessCapsule--callToAction a@href',
             'email': null,
             'employee_size': null,
@@ -323,13 +323,12 @@ function scrapeYell(params, callback) {
             listing.scraper = 'Yell';
             listing.address_locality = listing.address_locality.replace(listing.streetAddress, '').replace('United Kingdom', '');
             listing.phone = formatPhoneUK(listing.phone);
-
-            scrapeAlf(listing.name, function(info) {
-                console.log(`Getting additional information for ${listing.name}...`);
-                listing.employee_size = info.employee_size;
-            });
         })
         .then(function(context, data) {
+          scrapeAlf(data.name, function(info) {
+              console.log(`Getting additional information for ${data.name}...`);
+              data.employee_size = info.employee_size;
+          });
             results.push(data);
         })
         .log(console.log)
