@@ -26,13 +26,13 @@
   border-radius: 8px;
   display: inline-block;
 }
-
-
+.switch{height:30px;}
+.crawl-mode-label{text-align:center;}
 ///////////Dice-Senju///////
 .cr-btn {
   height: 40px;
   text-align: center;
-  width: 130px;
+  width: 100px;
   border-radius:40px;
   background: #fff;
   border: 2px solid rgb(0, 42, 67);
@@ -55,11 +55,11 @@
   }
 }
 
-.crawler{
+.crawler-header{
   font-size:50px;
   margin-top:0px;
-  padding:30px 0px 30px 0px;
   font-family: "Courier New", Courier, monospace;
+  padding:40px 0px 10px 0px;
 }
 
 .Datalist {
@@ -237,4 +237,8 @@ input {
   &:before {
     border-radius: 50%;
   }
+}
+.input-spacing
+{
+  padding:20px 0px 20px 0px;
 }

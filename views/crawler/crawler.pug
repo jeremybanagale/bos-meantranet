@@ -1,54 +1,64 @@
 extends ../layout
 
 block script
-    script(src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js")
-    script(src="//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.4/papaparse.min.js")
-    script(src='/js/crawler.js')
+  script(src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js")
+  script(src="//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.4/papaparse.min.js")
+  script(src='/js/crawler.js')
+  script(src='/js/usLocations.json')
 
 block content
-    .container
-        h1 Big Outsource Web Crawler
-        #alert-area
-        #scraperModal.modal.fade(role="dialog")
-            .modal-dialog
-                .modal-content
-                    .modal-header
-                        button.close("button", data-dismiss="modal") x
-                        h4.modal-title Scraping Status
-                    .modal-body
-                        p.modal-msg Scrape finished...
-                    .modal-footer
-                        button.btn.btn-default(type="button", data-dismiss="modal") Close
-
-        div.page-wrapper
-          label(for="select-country") Select a country:
-          form#select-country
+  .container
+    h1.crawler-header
+      strong Big Outsource Web Crawler
+      div#alert-area
+    form
+      .container-fluid.well
+        .row.input-spacing
+          .col-xs-1
+          .col-xs-3
+            label(for="select-country") Select a country:
+            #select-country
             input.country(type="radio", name="country", value = "United States")
             | &nbsp; United States
+            br
             input.country(type="radio", name="country", value = "United Kingdom")
             | &nbsp; United Kingdom
-          //- label(for="website") Select a website:
-          //- input#website(type="text", list="website-crawlers", placeholder="e.g. Yell.com")
-          //- datalist#website-crawlers
 
-        div.page-wrapper
-          label(for="state") Select a state:
-          input#state(type="text", list="json-states", placeholder="e.g. Texas")
-          datalist#json-states
+          .col-xs-4
+            label(for="website") Select a website:
+            br
+            input#website(type="text", list="website-crawlers", placeholder="e.g. Yell.com")
+            datalist#website-crawlers
 
-          label(for="cities") Select a city:
-          input#city(type="text", list="json-cities", placeholder="e.g. Glasgow")
-          datalist#json-cities
-          br
-          label(for="category") Select a category:
-          textarea#category(name="textarea" rows="10")
-
-        div
-          label#crawlmode.switch
-            input(type="checkbox", checked="checked")
-            div.slider.round
-          button#scrape.btn.default(type="button") Scrape
-          button#download.btn.default(type="button") Download
-
-        ul#results(data-role='listview', data-filter='true')
-          include crawl-template.html
+          .col-xs-3
+            label(for="cities") Select a city:
+            br
+            input#city(type="text", list="json-cities", placeholder="e.g. Glasgow")
+            datalist#json-cities
+              
+        .row.input-spacing
+          .col-xs-1
+          .col-xs-3
+            label Crawl Mode:
+            br
+            label#crawlmode.switch
+              input(type="checkbox", checked="checked")
+              div.slider.round
+          .col-xs-4
+            label(for="state") Select a state:
+            br
+            input#state(type="text", list="json-states", placeholder="e.g. Texas")
+            datalist#json-states
+          .col-xs-3
+            label(for="category") Select a category:
+            br
+            textarea#category(name="textarea" rows="6")
+        .row.input-spacing
+          .col-xs-4
+          .col-xs-6
+            button#scrape.cr-btn(type="button") Scrape
+            button#download.cr-btn(type="button") Download
+            button.cr-btn(type='reset') Reset
+        
+  ul#results(data-role='listview', data-filter='true')
+    include crawl-template.html

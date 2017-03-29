@@ -1,6 +1,6 @@
-<script id="search-results" type="text/x-handlebars-template">
+<script id="d121-results" type="text/x-handlebars-template">
   {{#each .}}
-    <table class="table table-hover table-bordered table-striped table-responsive">
+    <table class="table table-hover table-bordered table-striped">
         <thead>
             <th>Name</th>
             <th>Phone</th>
@@ -9,13 +9,12 @@
             <th>Region</th>
             <th>Postal</th>
             <th>Category</th>
-            <th>Price</th>
-            <th>Rating</th>
-            <th>Reviews</th>
             <th>Website</th>
             <th>Email</th>
             <th>Contact Name</th>
             <th>Contact Title</th>
+            <th>Employee Size</th>
+            <th>Type of Business</th>
             <th>Scraper</th>
         </thead>
         <tbody>
@@ -28,13 +27,12 @@
                 <td>{{address_region}}</td>
                 <td>{{postal_code}}</td>
                 <td>{{category}}</td>
-                <td>{{price_range}}</td>
-                <td>{{star_rating}}</td>
-                <td>{{review_count}}</td>
                 <td>{{website}}</td>
                 <td>{{email}}</td>
                 <td>{{contact_person}}</td>
                 <td>{{contact_title}}</td>
+                <td>{{employee_size}}</td>
+                <td>{{business_type}}</td>
                 <td>{{scraper}}</td>
               {{/each}}
         </tbody>

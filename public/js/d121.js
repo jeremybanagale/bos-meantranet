@@ -12,38 +12,26 @@ $(document).ready(function() {
     };
 
     $.ajaxSetup({
-      timeout: 300000
+        timeout: 300000
     });
 
-    $('input[name=country]:radio').change(function() {
-        var country = $('input[name=country]:checked').val();
+    loadUkLocations();
 
-        if (country == 'United Kingdom') {
-            loadUkLocations();
-
-        } else {
-            loadUsStates();
-        }
-
-        loadCrawlers();
-    });
-
-    $('#state').change(loadUsCities);
     $('#scrape').click(scrapeThis);
     // $('#download').click(downloadCSV);
     $('#download').click(saveData);
     $('#results > table > tbody > tr > td').bind('click', dataClick);
 
     function saveData() {
-      $.post('/searching', scrapedData, function() {
-        alert(`Stored ${scrapedData.lenght} records to the database.`);
-      })
-      .done(function() {
-        alert('All collections saved.');
-      })
-      .fail(function() {
-        alert('Error encountered');
-      });
+        $.post('/searching', scrapedData, function() {
+                alert(`Stored ${scrapedData.lenght} records to the database.`);
+            })
+            .done(function() {
+                alert('All collections saved.');
+            })
+            .fail(function() {
+                alert('Error encountered');
+            });
     }
 
     function dataClick(e) {
@@ -69,48 +57,6 @@ $(document).ready(function() {
         return items[Math.floor(Math.random() * items.length)];
     }
 
-    /**
-     * Loads list of available website crawlers.
-     */
-    // function loadCrawlers(e) {
-    //     var datalist = document.getElementById('website-crawlers');
-    //     var country = $('input[name=country]:checked').val();
-    //     var crawlers = {
-    //         uk: [
-    //             'Yell'
-    //         ],
-    //         us: [
-    //             'Citysearch',
-    //             'Yellowpages',
-    //             'Restaurantdotcom',
-    //             'Tripdavisor',
-    //             'Yelp'
-    //         ]
-    //     }
-    //
-    //     var crawler;
-    //
-    //     if (country == 'United States') {
-    //         crawler = crawlers['us'];
-    //
-    //     } else if (country == 'United Kingdom') {
-    //         crawler = crawlers['uk'];
-    //     }
-    //
-    //     if (datalist.hasChildNodes()) {
-    //         while (datalist.firstChild) {
-    //             datalist.removeChild(datalist.firstChild);
-    //         }
-    //     }
-    //
-    //     for (var i = 0; i < crawler.length; i++) {
-    //         var option = document.createElement('option');
-    //
-    //         option.value = crawler[i];
-    //         datalist.appendChild(option);
-    //     }
-    // }
-
     function loadJSON(file, callback) {
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType('application/json');
@@ -121,62 +67,6 @@ $(document).ready(function() {
             }
         };
         xobj.send(null);
-    }
-
-    function loadUsStates() {
-        var datalist = document.getElementById('json-states');
-        var input = document.getElementById('state');
-
-        if (datalist.hasChildNodes()) {
-            while (datalist.firstChild) {
-                datalist.removeChild(datalist.firstChild);
-            }
-        }
-
-        loadJSON('js/usLocations.json', function(res) {
-            var json = JSON.parse(res);
-
-            json.forEach(function(item) {
-                var option = document.createElement('option');
-
-                option.value = item['region_abbrev'];
-                option.text = item['region'];
-                if ($(`#json-states option[value='${option.value}']`).length == 0) {
-                    datalist.appendChild(option);
-                }
-            });
-        });
-    }
-
-    /**
-     * Loads list of cities in the United States.
-     */
-    function loadUsCities() {
-        var datalist = document.getElementById('json-cities');
-        var input = document.getElementById('city');
-        var state = document.getElementById('state');
-
-        if (datalist.hasChildNodes()) {
-            while (datalist.firstChild) {
-                datalist.removeChild(datalist.firstChild);
-            }
-        }
-
-        loadJSON('js/usLocations.json', function(res) {
-            var json = JSON.parse(res);
-
-            json.forEach(function(item) {
-                if (item['region_abbrev'] == state.value) {
-                    var option = document.createElement('option');
-
-                    option.value = item['locality'];
-                    option.text = item['locality'];
-                    if ($(`#json-cities option[value='${option.value}']`).length == 0) {
-                        datalist.appendChild(option);
-                    }
-                }
-            });
-        });
     }
 
     /**
@@ -226,14 +116,11 @@ $(document).ready(function() {
     function scrapeThis() {
         var categories = $('#category').val().split('\n');
         var parameters = {
-            country: $('input[name=country]:checked').val(),
             city: $('#city').val(),
-            state: $('#state').val(),
             category: ''
         };
 
-        // var source = $("#search-results").html();
-        var source = (parameters.country === 'United Kingdom') ? (source = $("#d121-results").html()) : (source = $("#search-results").html())
+        var source = $("#d121-results").html();
         var dataTemplate = Handlebars.compile(source);
         var results = $('#results');
 
@@ -241,9 +128,9 @@ $(document).ready(function() {
             parameters.category = categories[i];
 
             newAlert("info",
-                `Scraping ${parameters.category}(s) from ${parameters.city} ${parameters.state}`);
+                `Scraping ${parameters.category}(s) from ${parameters.city}`);
 
-            var scrape = $.get('/searching', parameters, function(data) {
+            var scrape = $.get('/search/d121', parameters, function(data) {
                     if (data instanceof Object && data.business.length > 0) {
                         results.append(dataTemplate({
                             page: data
@@ -252,17 +139,14 @@ $(document).ready(function() {
                         results.append(data);
                     };
 
-                    if (parameters.country == 'United Kingdom') {
-                        data.business = filterArray(data.business, filterD121);
-                    }
-
+                    data.business = filterArray(data.business, filterD121);
                     scrapedData.push(data);
                 })
                 .done(function(data) {
                     var type = (data.business.length > 0) ? type = 'success' : type = 'warning';
 
                     newAlert(type,
-                        `Scraped ${data.business.length} ${parameters.category}(s) from ${parameters.city} ${parameters.state}`);
+                        `Scraped ${data.business.length} ${parameters.category}(s) from ${parameters.city}`);
 
                     if ($('input[type=checkbox]:checked').length > 0) {
                         $('#state').val(getRandomItem($('#json-states > option')));
