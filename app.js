@@ -67,12 +67,12 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGODB_URI);
-mongoose.connection.on('error', () => {
-    console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
-    process.exit();
-});
+// mongoose.Promise = global.Promise;
+// mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGODB_URI);
+// mongoose.connection.on('error', () => {
+//     console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+//     process.exit();
+// });
 
 /**
  * Express configuration.
@@ -96,10 +96,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     secret: process.env.SESSION_SECRET,
-    store: new MongoStore({
-        url: process.env.MONGOLAB_URI || process.env.MONGODB_URI,
-        autoReconnect: true
-    })
+    // store: new MongoStore({
+    //     url: process.env.MONGOLAB_URI || process.env.MONGODB_URI,
+    //     autoReconnect: true
+    // })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
